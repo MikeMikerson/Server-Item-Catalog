@@ -1,0 +1,64 @@
+{% extends "main.html" %} {% block content %}
+<h1 class="ui center aligned header">
+    {{ category.name }}
+    <figure class="creator">
+        <img src="{{ url_for('static', filename='blank_user.gif') }}">
+        <figcaption>Created by: {{creator.name}}</figcaption>
+    </figure>
+    <a class="ui basic green button" href="{{url_for('newItem', category_id=category.id )}}">
+        Add Item
+    </a>
+    {% if 'username' in login_session and login_session['username'] == creator.name %}
+    <a class="ui basic yellow button" href="{{url_for('editCategory', category_id=category.id )}}">
+        Edit Category
+    </a>
+    <a class="ui basic red button" href="{{url_for('deleteCategory', category_id=category.id )}}">
+        Delete Category
+    </a>
+    {% endif %}
+
+</h1>
+
+<div class='flash'>
+    {% with messages = get_flashed_messages() %} {% if messages %}
+    <ul>
+        {% for message in messages %}
+        <li> <strong> {{ message }} </strong> </li>
+        {% endfor %}
+    </ul>
+    {% endif %} {% endwith %}
+</div>
+
+<div class="ui stackable three column grid">
+    {% for item in items %}
+    <div class="column">
+        <a class="ui card" href="{{url_for('singleItem', category_id=category.id, item_id=item.id)}}">
+            <div class="content">
+                <div class="header">{{item.name}}</div>
+                <div class="meta">
+                    <span>Price: {{item.price}}</span>
+                    <span class="right floated">{{item.user.name}}</span>
+                </div>
+                <div class="description">{{item.description[:35]}}...</div>
+            </div>
+            {% if item.user.name == login_session['username'] %}
+            <div class="extra content">
+                <!--<div class="ui two buttons">-->
+                <a href="{{url_for('editItem', category_id=category.id, item_id=item.id )}}">
+                    <div class="ui basic yellow button">
+                        Edit Item
+                    </div>
+                </a>
+                <a class="right floated" href="{{url_for('deleteItem', category_id=category.id, item_id=item.id )}}">
+                    <div class="ui basic red button">
+                        Delete Item
+                    </div>
+                </a>
+                <!--</div>-->
+            </div>
+            {% endif %}
+        </a>
+    </div>
+    {% endfor %}
+</div>
+{% endblock %}

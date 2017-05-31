@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>Item Catalog</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel=stylesheet type=text/css href="{{ url_for('static', filename='styles.css') }}">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/semantic-ui/2.2.10/semantic.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/semantic-ui/2.2.10/components/icon.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/semantic-ui/2.2.10/semantic.min.js"></script>
+</head>
+
+<body>
+    <nav>
+        <div class="ui teal fixed inverted menu">
+            <div class="ui container">
+                <a class="active item" href="{{url_for('showAll')}}">
+					Home
+				</a>
+				{% if 'username' in session %}
+                <a class="item" href="{{url_for('newCategory')}}">
+					New category
+				</a>
+				{% endif %}
+                <div class="right menu">
+                    {% if 'username' not in session %}
+                    <a class="item" href="{{url_for('showLogin')}}">
+						Login
+					</a>
+					{% else %}
+                    <a class="item">
+						{{ session['username'] }}
+					</a>
+                    <a class="item" href="{{url_for('disconnect')}}">
+						Logout
+					</a>
+					{% endif %}
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <div id="main-container" class="ui container">
+        <br>
+        {% block content %} {% endblock %}
+    </div>
+</body>
+
+</html>

@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <title>OAuth Practice</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!--LOAD PRE-REQUISITES FOR GOOGLE SIGN IN -->
+    <link rel=stylesheet type=text/css href="{{ url_for('static', filename='login.css') }}">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/semantic-ui/2.2.10/semantic.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/semantic-ui/2.2.10/components/icon.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/semantic-ui/2.2.10/semantic.min.js"></script>
+    <script src="//apis.google.com/js/platform.js?onload=start"></script>
+    <script src="{{url_for('static', filename='js.cookie.js')}}"></script>
+
+    <!-- END PRE-REQUISITES FOR GOOGLE SIGN IN -->
+</head>
+
+<body>
+
+    <script>
+        function signInCallback(authResult) {
+            var csrf_token = Cookies.get('_csrf_token');
+            if (authResult['code']) {
+                // Hide the sign-in button now that the user is authorized
+                $('#signinButton').attr('style', 'display: none');
+                // Send the one-time-use code to the server, if the server responds, write a 'login successful' message to the web page and then redirect back to the main category page
+                $.ajax({
+                    type: 'POST',
+                    url: '/gconnect?state={{STATE}}',
+                    processData: false,
+                    data: authResult['code'],
+                    contentType: 'application/octet-stream; charset=utf-8',
+                    beforeSend: function(xhr, settings) {
+                        if (!this.crossDomain) {
+                            xhr.setRequestHeader("X-CSRFToken", csrf_token);
+                        }
+                    },
+                    success: function(result) {
+                        // Handle or verify the server response if necessary.
+                        if (result) {
+                            $('#result').html('Login Successful!</br>' + result + '</br>Redirecting...')
+                            setTimeout(function() {
+                                window.location.href = "/category";
+                            }, 4000);
+
+                        } else if (authResult['error']) {
+                            console.log('There was an error: ' + authResult['error']);
+                        } else {
+                            $('#result').html(
+                                'Failed to make a server-side call. Check your configuration and console.'
+                            );
+                        }
+                    }
+
+                });
+            }
+        }
+    </script>
+
+    <!--FACEBOOK SIGN IN -->
+    <script>
+        window.fbAsyncInit = function() {
+            FB.init({
+                appId: 'APP ID HERE',
+                cookie: true, // enable cookies to allow the server to access
+                // the session
+                xfbml: true, // parse social plugins on this page
+                version: 'v2.2' // use version 2.2
+            });
+        };
+        // Load the SDK asynchronously
+        (function(d, s, id) {
+            var js, fjs = d.getElementsByTagName(s)[0];
+            if (d.getElementById(id)) return;
+            js = d.createElement(s);
+            js.id = id;
+            js.src = "//connect.facebook.net/en_US/sdk.js";
+            fjs.parentNode.insertBefore(js, fjs);
+        }(document, 'script', 'facebook-jssdk'));
+        // Here we run a very simple test of the Graph API after login is
+        // successful.  See statusChangeCallback() for when this call is made.
+        function sendTokenToServer() {
+            var csrf_token = Cookies.get('_csrf_token');
+            var access_token = FB.getAuthResponse()['accessToken'];
+            FB.api('/me', function(response) {
+                $.ajax({
+                    type: 'POST',
+                    url: '/fbconnect?state={{STATE}}',
+                    processData: false,
+                    data: access_token,
+                    contentType: 'application/octet-stream; charset=utf-8',
+                    beforeSend: function(xhr, settings) {
+                        if (!this.crossDomain) {
+                            xhr.setRequestHeader("X-CSRFToken", csrf_token);
+                        }
+                    },
+                    success: function(result) {
+                        // Handle or verify the server response if necessary.
+                        if (result) {
+                            $('#result').html('Login Successful!</br>' + result +
+                                '</br>Redirecting...')
+                            setTimeout(function() {
+                                window.location.href = "/category";
+                            }, 4000);
+
+                        } else {
+                            $('#result').html(
+                                'Failed to make a server-side call. Check your configuration and console.'
+                            );
+                        }
+                    }
+
+                });
+            });
+        }
+    </script>
+
+    <div class="ui middle aligned center aligned grid">
+        <div class="column">
+            <div class="content">
+                <h1>Login to your account</h1>
+            </div>
+            <form class="ui large form">
+                <div class="ui stacked segment">
+                    <div class="field">
+                        <button>
+                            <fb:login-button scope="public_profile,email" onlogin="sendTokenToServer();">
+                                <a>Login with Facebook</a>
+                            </fb:login-button>
+                        </button>
+                    </div>
+                    <div class="field">
+                        <div id="signInButton">
+                            <span class="g-signin" data-scope="openid email" data-clientid="802705733780-vrm44ks5ah5t7ekb766uelcr93utnvtp.apps.googleusercontent.com" data-redirecturi="postmessage" data-accesstype="offline" data-cookiepolicy="single_host_origin" data-callback="signInCallback"
+                                data-approvalprompt="force">
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+
+</body>
+
+</html>

@@ -1,0 +1,32 @@
+{% extends "main.html" %} {% block content %}
+<div class='flash'>
+    {% with messages = get_flashed_messages() %} {% if messages %}
+    <ul>
+        {% for message in messages %}
+        <li> <strong> {{ message }} </strong> </li>
+        {% endfor %}
+    </ul>
+    {% endif %} {% endwith %}
+</div>
+
+<div class="ui huge header">Sports Catalog</div>
+<div class="ui top attached segment">
+    <div class="ui divided items">
+        {% for c in categories %}
+        <div class="item">
+            <div class="content">
+                <div class="description">
+                    <h2 class="ui header">{{c.name}}</h2>
+                    <p>{{c.description[:50]}}</p>
+                </div>
+                <div class="extra">
+                    <a class="header" href="{{url_for('showItem', category_id=c.id)}}">
+                        View Items
+                        <i class="arrow right icon"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+        {% endfor %} {% endblock %}
+    </div>
+</div>

@@ -1,0 +1,21 @@
+{% extends "main.html" %}
+{% block content %}
+<h1 class="ui header">New Category</h1>
+<form class="ui form" method="post">
+	<div class="field">
+		{% if params.error_name %}
+			<p>{{params.error_name}}</p>
+		{% endif %}
+		<label for="name">Name</label>
+		<input type="text" maxlength="100" name="name" value="{{params.name}}">
+		{% if params.error_description %}
+			<p>{{params.error_description}}</p>
+		{% endif %}				
+		<label for="description">Description</label>
+		<input type="text" maxlength="250" name="description" value={{params.description}}>
+		<button class="ui green basic button" type="submit">Create</button>
+		<input name="_csrf_token" type="hidden" value="{{ csrf_token() }}">
+	</div>
+</form>
+
+{% endblock %}

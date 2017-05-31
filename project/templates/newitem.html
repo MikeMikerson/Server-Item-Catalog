@@ -1,0 +1,26 @@
+{% extends "main.html" %}
+{% block content %}
+<h1 class="ui header">New Item</h1>
+<form class="ui form" method="post">
+	<div class="field">
+		{% if params.error_name %}
+			<p>{{params.error_name}}</p>
+		{% endif %}
+		<label for="name">Name</label>
+		<input type="text" maxlength="100" name="name" value="{{params.name}}">
+		{% if params.error_description %}
+			<p>{{params.error_description}}</p>
+		{% endif %}				
+		<label for="description">Description</label>
+		<textarea maxlength="250" rows="3" name="description" placeholder="Description">{{params.description}}</textarea>
+		{% if params.error_price %}
+			<p>{{params.error_price}}</p>
+		{% endif %}	
+		<label for="price">Price</label>
+		<input type="text" maxlength="10" name="price" placeholder="Price" value="{{params.price}}">
+		<button class="ui green basic button" type="submit">Create</button>
+		<input name="_csrf_token" type="hidden" value="{{ csrf_token() }}">
+	</div>
+</form>
+{% endblock %}
+

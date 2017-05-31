@@ -1,0 +1,20 @@
+{% extends "main.html" %} {% block content %}
+<h1 class="ui header">Edit {{category.name}}</h1>
+<form class="ui form" method="post">
+    <div class="field">
+        {% if params.error_name %}
+        <p>{{params.error_name}}</p>
+        {% endif %}
+        <label for="name">Name</label>
+        <input type="text" maxlength="100" name="name" value="{{category.name}}"> {% if params.error_description %}
+        <p>{{params.error_description}}</p>
+        {% endif %}
+        <label for="description">Description</label>
+        <textarea class="form-control" maxlength="250" rows="3" name="description">{{category.description}}</textarea>
+
+        <button class="ui green basic button" type="submit">Save</button>
+        <a class="cancel" href="{{url_for('showItem', category_id=category.id)}}">Cancel</a>
+        <input name="_csrf_token" type="hidden" value="{{ csrf_token() }}">
+    </div>
+</form>
+{% endblock %}

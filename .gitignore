@@ -1,0 +1,11 @@
+.DS_Store
+*.pyc
+*.db-journal
+*.vscode
+*.vagrant
+my_client_secrets.json
+my_fb_client_secrets.json
+restaurantmenu.db
+restaurantmenuwithusers.db
+todo.md
+itemcatalog.db
