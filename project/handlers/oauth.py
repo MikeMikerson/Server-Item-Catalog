@@ -11,7 +11,7 @@ import requests
 from project.utils.utils import createUser, getUserID
 
 CLIENT_ID = json.loads(
-    open('client_secrets.json', 'r').read())['web']['client_id']
+    open('/srv/catalog-app/Server-Item-Catalog/client_secrets.json', 'r').read())['web']['client_id']
 APPLICATION_NAME = 'AuthPractice'
 
 

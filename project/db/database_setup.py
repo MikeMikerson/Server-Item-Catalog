@@ -57,8 +57,8 @@ class Item(Base):
         }
 
 
-def catalog_create(db_url):
-    engine = create_engine('sqlite:///itemcatalog.db')
+def catalog_create():
+    engine = create_engine('postgresql://catalog:password@localhost/catalog')
     Base.metadata.create_all(engine)
     print("DB successfully created")
 
