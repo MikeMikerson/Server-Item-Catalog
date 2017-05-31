@@ -61,3 +61,5 @@ def catalog_create(db_url):
     engine = create_engine('sqlite:///itemcatalog.db')
     Base.metadata.create_all(engine)
     print("DB successfully created")
+
+catalog_create()
