@@ -25,5 +25,3 @@ def before_request():
 application.before_request(before_request)
 application.config['DATABASE_URL'] = 'postgresql://catalog:password@localhost/catalog'
 application.secret_key = 'change_in_production'
-db_seed()
-
