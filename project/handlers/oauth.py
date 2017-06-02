@@ -11,7 +11,7 @@ import requests
 from project.utils.utils import createUser, getUserID
 
 CLIENT_ID = json.loads(
-    open('/srv/catalog-app/Server-Item-Catalog/client_secrets.json', 'r').read())['web']['client_id']
+    open('/srv/Server-Item-Catalog/client_secrets.json', 'r').read())['web']['client_id']
 APPLICATION_NAME = 'AuthPractice'
 
 
@@ -30,7 +30,7 @@ def gconnect():
 
     try:
         # Upgrade the authorization code into a credentials object
-        oauth_flow = flow_from_clientsecrets('/srv/catalog-app/Server-Item-Catalog/client_secrets.json', scope='')
+        oauth_flow = flow_from_clientsecrets('/srv/Server-Item-Catalog/client_secrets.json', scope='')
         oauth_flow.redirect_uri = 'postmessage'
         credentials = oauth_flow.step2_exchange(code)
     except FlowExchangeError:
@@ -153,8 +153,8 @@ def fbconnect():
         return repsonse
     access_token = request.data
 
-    app_id = json.loads(open('/srv/catalog-app/Server-Item-Catalog/fb_client_secrets.json', 'r').read())['web']['app_id']
-    app_secret = json.loads(open('/srv/catalog-app/Server-Item-Catalog/fb_client_secrets.json', 'r').read())['web']['app_secret']
+    app_id = json.loads(open('/srv/Server-Item-Catalog/fb_client_secrets.json', 'r').read())['web']['app_id']
+    app_secret = json.loads(open('/srv/Server-Item-Catalog/fb_client_secrets.json', 'r').read())['web']['app_secret']
     url = ('https://graph.facebook.com/v2.8/oauth/access_token?'
            'grant_type=fb_exchange_token&client_id=%s&client_secret=%s'
            '&fb_exchange_token=%s') % (app_id, app_secret, access_token)

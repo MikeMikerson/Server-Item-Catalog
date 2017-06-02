@@ -5,7 +5,7 @@ import os.path
 import sys
 import logging
 logging.basicConfig(stream=sys.stderr)
-sys.path.insert(0, '/srv/catalog-app/Server-Item-Catalog')
+sys.path.insert(0, '/srv/Server-Item-Catalog')
 
 from project import app as application
 from flask import Flask
