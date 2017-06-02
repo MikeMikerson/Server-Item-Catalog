@@ -127,6 +127,3 @@ def db_seed():
     session.commit()
 
     print "added items!"
-
-
-db_seed()
